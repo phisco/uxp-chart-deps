@@ -40,5 +40,5 @@ keywords:
   - eks
 dependencies:
   - name: crossplane
-    version: ">=0.0.1"
-    repository: "file://../crossplane"
+    version: "1.12.1"
+    repository: "https://charts.crossplane.io/stable"

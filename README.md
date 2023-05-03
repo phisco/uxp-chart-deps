@@ -6,17 +6,13 @@
 .
 └── charts
     └── universal-crossplane
-        ├── Chart.yaml
-        ├── charts
-        │   └── crossplane -> the exact copy of the crossplane chart
+        ├── Chart.yaml -> referencing the upstream chart directly
         ├── templates -> any additional component we might want to specify
         │   ├── NOTES.txt
         │   ├── _helpers.tpl
         │   └── bootstrapper
         └── values.yaml -> defining only additional values and overriding the needed ones for crossplane
 ```
-
-`charts/universal-crossplane/charts/crossplane` is an exact copy of the upstream [Helm chart](https://github.com/crossplane/crossplane/tree/master/cluster/charts/crossplane), vendored just to ease future modifications if needed.
 
 # Usage
 
@@ -68,6 +64,14 @@ Chart Application Version: 1.12.1
 
 Kube Version: v1.26.3
 
+$ helm dependency build cluster/charts/universal-crossplane
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "crossplane-stable" chart repository
+Update Complete. ⎈Happy Helming!⎈
+Saving 1 charts
+Downloading crossplane from repo https://charts.crossplane.io/stable
+Deleting outdated charts
+
 $ helm upgrade --install crossplane cluster/charts/universal-crossplane
 Release "crossplane" has been upgraded. Happy Helming!
 NAME: crossplane
@@ -83,3 +87,31 @@ By proceeding, you are accepting to comply with terms and conditions in https://
 ```
 All should be working fine and the image used should be now the one from the uxp chart.
 
+# Packaging
+
+```bash
+$ helm dependency build cluster/charts/universal-crossplane
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "crossplane-stable" chart repository
+Update Complete. ⎈Happy Helming!⎈
+Saving 1 charts
+Downloading crossplane from repo https://charts.crossplane.io/stable
+Deleting outdated charts
+
+$ helm package cluster/charts/universal-crossplane
+Successfully packaged chart and saved it to: <PWD>/universal-crossplane-0.0.1.tgz
+
+$ helm upgrade --install crossplane universal-crossplane-0.0.1.tgz
+Release "crossplane" has been upgraded. Happy Helming!
+NAME: crossplane
+LAST DEPLOYED: Wed May  3 17:26:48 2023
+NAMESPACE: default
+STATUS: deployed
+REVISION: 4
+TEST SUITE: None
+NOTES:
+By proceeding, you are accepting to comply with terms and conditions in https://licenses.upbound.io/upbound-software-license.html
+
+✨ Thank you for installing Universal Crossplane!
+🚀 Install packages from https://marketplace.upbound.io to get started!
+```
